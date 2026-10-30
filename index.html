@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="hi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#173b63">
+  <meta name="description" content="शादी के अलग-अलग पेज और पूरे खर्च का हिसाब।">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <title>शादी का हिसाब</title>
+  <style>
+    :root {
+      --navy: #173b63;
+      --blue: #eaf2fb;
+      --green: #e8f5e9;
+      --amber: #fff4d6;
+      --ink: #17212b;
+      --muted: #667085;
+      --line: #e5eaf0;
+      --red: #b42318
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6f9;
+      color: var(--ink);
+      font: 16px system-ui, -apple-system, "Noto Sans Devanagari", sans-serif
+    }
+
+    header {
+      background: var(--navy);
+      color: #fff;
+      padding: 17px 16px 15px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      box-shadow: 0 2px 8px #0002
+    }
+
+    .headrow {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px
+    }
+
+    header h1 {
+      font-size: 21px;
+      margin: 0
+    }
+
+    header p {
+      margin: 3px 0 0;
+      color: #dce8f5;
+      font-size: 12px
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 14px
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font: 600 14px system-ui;
+      cursor: pointer
+    }
+
+    .primary {
+      background: var(--navy);
+      color: #fff
+    }
+
+    .secondary {
+      background: #edf1f5;
+      color: #344054
+    }
+
+    .danger {
+      background: #fff0ef;
+      color: var(--red);
+      padding: 8px 10px;
+      font-size: 12px
+    }
+
+    .back {
+      background: #ffffff20;
+      color: white;
+      border: 1px solid #ffffff45;
+      padding: 8px 11px
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin: 12px 0 16px
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 13px;
+      min-width: 0;
+      box-shadow: 0 2px 8px #13223808
+    }
+
+    .card.total {
+      background: var(--blue)
+    }
+
+    .card.paid {
+      background: var(--green)
+    }
+
+    .card.pending {
+      background: var(--amber)
+    }
+
+    .label {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .amount {
+      font-size: clamp(17px, 4vw, 23px);
+      font-weight: 750;
+      margin-top: 5px;
+      overflow-wrap: anywhere
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 15px;
+      margin: 13px 0;
+      box-shadow: 0 2px 8px #13223808
+    }
+
+    h2 {
+      font-size: 17px;
+      margin: 0 0 12px
+    }
+
+    .sectionhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px
+    }
+
+    .pagegrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px
+    }
+
+    .pagecard {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 13px;
+      text-align: left;
+      width: 100%;
+      color: var(--ink)
+    }
+
+    .pagecard:active {
+      transform: scale(.99)
+    }
+
+    .pagename {
+      font-weight: 750;
+      font-size: 16px;
+      margin-bottom: 9px
+    }
+
+    .mini {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px
+    }
+
+    .mini div {
+      background: #f6f8fa;
+      border-radius: 8px;
+      padding: 7px 5px;
+      min-width: 0
+    }
+
+    .mini small {
+      display: block;
+      color: var(--muted);
+      font-size: 10px
+    }
+
+    .mini b {
+      font-size: 12px;
+      overflow-wrap: anywhere
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px
+    }
+
+    .field.full {
+      grid-column: 1/-1
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 650;
+      color: #344054
+    }
+
+    input {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #cfd8e3;
+      border-radius: 9px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink)
+    }
+
+    input:focus {
+      outline: 2px solid #9cc5ef;
+      border-color: #528bc7
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 11px
+    }
+
+    .entry {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 9px;
+      background: #fff
+    }
+
+    .entrytop {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px
+    }
+
+    .entrytitle {
+      font-weight: 750
+    }
+
+    .sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px
+    }
+
+    .entrygrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-top: 10px
+    }
+
+    .entrygrid div {
+      background: #f6f8fa;
+      padding: 8px;
+      border-radius: 8px;
+      min-width: 0
+    }
+
+    .entrygrid small {
+      display: block;
+      color: var(--muted);
+      font-size: 10px
+    }
+
+    .entrygrid b {
+      font-size: 13px;
+      overflow-wrap: anywhere
+    }
+
+    .empty {
+      padding: 22px 10px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 9px 0 0
+    }
+
+    #pageViewTitle {
+      font-size: 19px;
+      font-weight: 750;
+      margin: 4px 0
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 8px 15px 24px
+    }
+
+    @media(max-width:480px) {
+      main {
+        padding: 10px
+      }
+
+      .cards {
+        gap: 6px
+      }
+
+      .card {
+        padding: 10px 8px
+      }
+
+      .panel {
+        padding: 12px
+      }
+
+      .mini {
+        gap: 3px
+      }
+
+      .mini div {
+        padding: 6px 4px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="headrow">
+      <div>
+        <h1>शादी का हिसाब</h1>
+        <p id="headerSub">सभी खर्चों का पूरा हिसाब</p>
+      </div>
+      <button id="backBtn" class="back hidden" type="button">← Dashboard</button>
+    </div>
+  </header>
+  <main>
+    <section id="dashboardView">
+      <h2>Dashboard</h2>
+      <section class="cards">
+        <div class="card total">
+          <div class="label">Grand Total</div>
+          <div class="amount" id="grandTotal">₹0</div>
+        </div>
+        <div class="card paid">
+          <div class="label">कुल दिया</div>
+          <div class="amount" id="grandPaid">₹0</div>
+        </div>
+        <div class="card pending">
+          <div class="label">कुल बाकी</div>
+          <div class="amount" id="grandPending">₹0</div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="sectionhead">
+          <h2 style="margin:0">आपके पेज</h2><button class="primary" id="showAddPage">+ नया पेज</button>
+        </div>
+        <p class="hint">अलग-अलग काम या खर्च के लिए अपने हिसाब से पेज बनाएं। हर पेज का हिसाब यहाँ दिखेगा।</p>
+        <div id="pageList" class="pagegrid" style="margin-top:12px"></div>
+      </section>
+      <section id="addPagePanel" class="panel hidden">
+        <h2>नया पेज बनाएं</h2>
+        <form id="pageForm">
+          <div class="field full"><label for="newPageName">पेज का नाम</label><input id="newPageName" maxlength="50"
+              placeholder="जैसे टेंट, हलवाई, कपड़े, गाड़ी" required></div>
+          <div class="field full">
+            <div class="actions"><button class="primary" type="submit">पेज बनाएं</button><button class="secondary"
+                id="cancelAddPage" type="button">रद्द करें</button></div>
+          </div>
+        </form>
+      </section>
+      <section class="actions">
+        <button class="secondary" id="exportBtn" type="button">बैकअप डाउनलोड करें</button>
+        <button class="secondary" id="importBtn" type="button">बैकअप वापस लाएँ</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden>
+      </section>
+      <p class="hint">डेटा इसी फोन के Browser में सेव होता है। समय-समय पर बैकअप डाउनलोड करें।</p>
+    </section>
+
+    <section id="pageView" class="hidden">
+      <div id="pageViewTitle"></div>
+      <section class="cards">
+        <div class="card total">
+          <div class="label">इस पेज का कुल</div>
+          <div class="amount" id="pageTotal">₹0</div>
+        </div>
+        <div class="card paid">
+          <div class="label">इस पेज पर दिया</div>
+          <div class="amount" id="pagePaid">₹0</div>
+        </div>
+        <div class="card pending">
+          <div class="label">इस पेज का बाकी</div>
+          <div class="amount" id="pagePending">₹0</div>
+        </div>
+      </section>
+      <section class="panel">
+        <h2 id="entryFormHeading">नई एंट्री जोड़ें</h2>
+        <form id="entryForm">
+          <div class="field"><label for="entryDate">तारीख</label><input id="entryDate" type="date" required></div>
+          <div class="field"><label for="entryItem">आइटम नाम</label><input id="entryItem" maxlength="80"
+              placeholder="जैसे टेंट एडवांस" required></div>
+          <div class="field"><label for="entryAmount">कुल रकम (₹)</label><input id="entryAmount" type="number" min="0"
+              step="1" inputmode="numeric" required></div>
+          <div class="field"><label for="entryPaid">दिया गया (₹)</label><input id="entryPaid" type="number" min="0"
+              step="1" inputmode="numeric" value="0" required></div>
+          <div class="field full"><label for="entryNote">नोट (वैकल्पिक)</label><input id="entryNote" maxlength="120"
+              placeholder="वैकल्पिक"></div>
+          <div class="field full">
+            <div class="actions"><button class="primary" id="saveEntryBtn" type="submit">सेव करें</button><button
+                class="secondary hidden" id="cancelEditBtn" type="button">रद्द करें</button></div>
+          </div>
+        </form>
+      </section>
+      <section class="panel">
+        <div class="sectionhead">
+          <h2 style="margin:0">इस पेज की एंट्री</h2><span class="hint" id="entryCount"></span>
+        </div>
+        <div id="entryList"></div>
+      </section>
+    </section>
+  </main>
+  <footer>मोबाइल फ्रेंडली • ऑफलाइन सपोर्ट • लोकल डेटा</footer>
+  <script>
+    (() => {
+      const STORE = 'shadi_hisab_multipage_v1'; let db = {pages: []}, activePage = null, editId = null;
+      const $ = id => document.getElementById(id);
+      const fmt = n => '₹' + Number(n || 0).toLocaleString('en-IN', {maximumFractionDigits: 0});
+      const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+      const totals = items => (items || []).reduce((a, x) => ({total: a.total + Number(x.amount || 0), paid: a.paid + Number(x.paid || 0)}), {total: 0, paid: 0});
+      function save() {localStorage.setItem(STORE, JSON.stringify(db)); renderDashboard();}
+      function load() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(STORE) || 'null'); if (raw && Array.isArray(raw.pages)) db = raw; else {
+            // Import legacy single-list data automatically if it exists on this same website origin.
+            const old = JSON.parse(localStorage.getItem('shadi_hisab_offline_v1') || '[]');
+            db = {pages: old.length ? [{id: 'default', name: 'पुराने खर्च', entries: old}] : []};
+          }
+        } catch (e) {db = {pages: []};}
+      }
+      function showDashboard() {
+        activePage = null; $('dashboardView').classList.remove('hidden'); $('pageView').classList.add('hidden'); $('backBtn').classList.add('hidden'); $('headerSub').textContent = 'सभी खर्चों का पूरा हिसाब'; renderDashboard(); window.scrollTo(0, 0);
+      }
+      function renderDashboard() {
+        const all = db.pages.flatMap(p => p.entries || []), t = totals(all);
+        $('grandTotal').textContent = fmt(t.total); $('grandPaid').textContent = fmt(t.paid); $('grandPending').textContent = fmt(t.total - t.paid);
+        if (!db.pages.length) {$('pageList').innerHTML = '<div class="empty" style="grid-column:1/-1">अभी कोई पेज नहीं है। “+ नया पेज” दबाकर पहला पेज बनाएं।</div>'; return;}
+        $('pageList').innerHTML = db.pages.map(p => {const s = totals(p.entries); return `<button type="button" class="pagecard" data-open="${p.id}"><div class="pagename">${esc(p.name)} <span style="float:right;color:#667085">›</span></div><div class="mini"><div><small>कुल</small><b>${fmt(s.total)}</b></div><div><small>दिया</small><b>${fmt(s.paid)}</b></div><div><small>बाकी</small><b>${fmt(s.total - s.paid)}</b></div></div></button>`}).join('');
+      }
+      function openPage(id) {
+        const p = db.pages.find(x => x.id === id); if (!p) return; activePage = id; editId = null;
+        $('dashboardView').classList.add('hidden'); $('pageView').classList.remove('hidden'); $('backBtn').classList.remove('hidden'); $('headerSub').textContent = 'अलग-अलग पेज का हिसाब'; $('pageViewTitle').textContent = p.name;
+        resetEntryForm(); renderPage(); window.scrollTo(0, 0);
+      }
+      function renderPage() {
+        const p = db.pages.find(x => x.id === activePage); if (!p) return;
+        const t = totals(p.entries); $('pageTotal').textContent = fmt(t.total); $('pagePaid').textContent = fmt(t.paid); $('pagePending').textContent = fmt(t.total - t.paid); $('entryCount').textContent = (p.entries || []).length + ' एंट्री';
+        if (!p.entries.length) {$('entryList').innerHTML = '<div class="empty">इस पेज पर अभी कोई एंट्री नहीं है।</div>'; return;}
+        $('entryList').innerHTML = [...p.entries].sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(e => `<article class="entry"><div class="entrytop"><div><div class="entrytitle">${esc(e.item)}</div><div class="sub">${esc(e.date || '')}${e.note ? ' • ' + esc(e.note) : ''}</div></div><button class="secondary" data-edit="${e.id}" type="button">Edit</button></div><div class="entrygrid"><div><small>कुल रकम</small><b>${fmt(e.amount)}</b></div><div><small>दिया गया</small><b>${fmt(e.paid)}</b></div><div><small>बाकी</small><b>${fmt(Number(e.amount) - Number(e.paid))}</b></div></div><div class="actions"><button class="danger" data-delete="${e.id}" type="button">हटाएँ</button></div></article>`).join('');
+      }
+      function resetEntryForm() {editId = null; $('entryForm').reset(); $('entryDate').value = new Date().toISOString().slice(0, 10); $('entryPaid').value = '0'; $('entryFormHeading').textContent = 'नई एंट्री जोड़ें'; $('saveEntryBtn').textContent = 'सेव करें'; $('cancelEditBtn').classList.add('hidden');}
+      $('showAddPage').addEventListener('click', () => {$('addPagePanel').classList.remove('hidden'); $('newPageName').focus();});
+      $('cancelAddPage').addEventListener('click', () => {$('addPagePanel').classList.add('hidden'); $('pageForm').reset();});
+      $('pageForm').addEventListener('submit', e => {e.preventDefault(); const name = $('newPageName').value.trim(); if (!name) return; if (db.pages.some(p => p.name.toLowerCase() === name.toLowerCase())) {alert('इस नाम का पेज पहले से मौजूद है।'); return;} const id = 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6); db.pages.push({id, name, entries: []}); save(); $('pageForm').reset(); $('addPagePanel').classList.add('hidden'); openPage(id);});
+      $('pageList').addEventListener('click', e => {const b = e.target.closest('[data-open]'); if (b) openPage(b.dataset.open);});
+      $('backBtn').addEventListener('click', showDashboard);
+      $('entryForm').addEventListener('submit', e => {e.preventDefault(); const p = db.pages.find(x => x.id === activePage); if (!p) return; const amount = Number($('entryAmount').value), paid = Number($('entryPaid').value); if (paid > amount) {alert('दिया गया पैसा कुल रकम से ज्यादा नहीं हो सकता।'); return;} const row = {id: editId || 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), date: $('entryDate').value, item: $('entryItem').value.trim(), amount, paid, note: $('entryNote').value.trim()}; if (editId) p.entries = p.entries.map(x => x.id === editId ? row : x); else p.entries.push(row); localStorage.setItem(STORE, JSON.stringify(db)); resetEntryForm(); renderPage();});
+      $('entryList').addEventListener('click', e => {const ed = e.target.closest('[data-edit]'), del = e.target.closest('[data-delete]'), p = db.pages.find(x => x.id === activePage); if (!p) return; if (ed) {const r = p.entries.find(x => x.id === ed.dataset.edit); if (!r) return; editId = r.id; $('entryDate').value = r.date; $('entryItem').value = r.item; $('entryAmount').value = r.amount; $('entryPaid').value = r.paid; $('entryNote').value = r.note || ''; $('entryFormHeading').textContent = 'एंट्री बदलें'; $('saveEntryBtn').textContent = 'बदलाव सेव करें'; $('cancelEditBtn').classList.remove('hidden'); window.scrollTo({top: 0, behavior: 'smooth'});} if (del) {const r = p.entries.find(x => x.id === del.dataset.delete); if (r && confirm('"' + r.item + '" की एंट्री हटानी है?')) {p.entries = p.entries.filter(x => x.id !== r.id); localStorage.setItem(STORE, JSON.stringify(db)); renderPage();} } });
+      $('cancelEditBtn').addEventListener('click', resetEntryForm);
+      $('exportBtn').addEventListener('click', () => {const blob = new Blob([JSON.stringify(db, null, 2)], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'shadi-hisab-backup.json'; a.click(); URL.revokeObjectURL(a.href);});
+      $('importBtn').addEventListener('click', () => $('importFile').click());
+      $('importFile').addEventListener('change', async e => {const f = e.target.files[0]; if (!f) return; try {const obj = JSON.parse(await f.text()); if (!obj || !Array.isArray(obj.pages)) throw Error(); if (confirm('मौजूदा हिसाब की जगह बैकअप लाना है?')) {db = obj; localStorage.setItem(STORE, JSON.stringify(db)); showDashboard();} } catch (x) {alert('यह बैकअप फाइल सही नहीं है।');} e.target.value = '';});
+      load(); renderDashboard();
+      if ('serviceWorker' in navigator && location.protocol.startsWith('http')) addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => { }));
+    })();
+  </script>
+</body>
+
+</html>

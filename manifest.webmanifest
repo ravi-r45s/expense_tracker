@@ -1,0 +1,26 @@
+{
+  "id": "./",
+  "name": "शादी का हिसाब",
+  "short_name": "शादी हिसाब",
+  "description": "अलग-अलग पेज पर शादी के खर्च का हिसाब",
+  "lang": "hi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f9",
+  "theme_color": "#173b63",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
